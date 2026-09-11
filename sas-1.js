@@ -214,3 +214,89 @@ function Trajets() {
         console.log("---");
     }
 }
+
+const tickets = [];
+let nextTicketId = 1; 
+
+function achats() {
+
+    let tripId = Number(prompt("Identifiant du trajet : "));
+    let passengerName = prompt("Nom du passager : ");
+
+  
+    let trip = null;
+    for (let i = 0; i < trips.length; i++) {
+        if (trips[i].id === tripId) {
+            trip = trips[i];
+            break;
+        }
+    }
+
+    if (trip === null) {
+        console.log("Trajet introuvable.");
+        return;
+    }
+
+
+    if (trip.availableSeats <= 0) {
+        console.log("Train complet.");
+        return;
+    }
+
+  
+    let seatNumber = 1;
+    for (let i = 0; i < trips.length; i++) {
+        if (trips[i].tripId === tripId) {
+            seatNumber++;
+        }
+    }
+
+    let ticket = {
+        id: nextTicketId,            
+        passengerName: passengerName,
+        tripId: trip.id,
+        seatNumber: seatNumber,
+        price: trip.price
+    };
+    nextTicketId++;
+
+    tickets.push(ticket);
+
+  
+    trip.availableSeats--;
+
+    console.log("Ticket acheté avec succès.");
+    console.log(`Ticket #${ticket.id}`);
+    console.log(`Passager : ${ticket.passengerName}`);
+    console.log(`Trajet : ${trip.departure} → ${trip.destination}`);
+    console.log(`Place : ${ticket.seatNumber}`);
+    console.log(`Prix : ${ticket.price} DH`);
+}
+
+function afficherTickets() {
+    if (tickets.length === 0) {
+        console.log("Aucun ticket enregistré.");
+        return;
+    }
+
+    console.log("=== TICKETS ===");
+    for (let i = 0; i < tickets.length; i++) {
+        let ticket = tickets[i];
+
+ 
+        let trip = null;
+        for (let j = 0; j < trips.length; j++) {
+            if (trips[j].id === ticket.tripId) {
+                trip = trips[j];
+                break;
+            }
+        }
+
+        console.log(`Ticket #${ticket.id}`);
+        console.log(`Passager : ${ticket.passengerName}`);
+        console.log(`Trajet : ${trip.departure} → ${trip.destination}`);
+        console.log(`Place : ${ticket.seatNumber}`);
+        console.log(`Prix : ${ticket.price} DH`);
+        console.log("---");
+    }
+}
